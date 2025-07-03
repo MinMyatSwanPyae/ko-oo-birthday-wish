@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wish Tree For Ko Oo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 30%, #90EE90 70%, #32CD32 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-leaf {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #228B22;
+            border-radius: 0 100% 0 100%;
+            animation: float-down 15s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes float-down {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            color: #2F4F4F;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #228B22, #32CD32, #90EE90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: #2F4F4F;
+            opacity: 0.9;
+        }
+
+        .tree-container {
+            position: relative;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(34, 139, 34, 0.1) 100%);
+            border-radius: 20px;
+            transition: all 1s ease;
+        }
+
+        .tree-container.medium {
+            height: 700px;
+        }
+
+        .tree-container.large {
+            height: 800px;
+        }
+
+        .tree-container.extra-large {
+            height: 950px;
+        }
+
+        .tree-container.giant {
+            height: 1100px;
+        }
+
+        .tree-container.massive {
+            height: 1300px;
+        }
+
+        .tree {
+            position: relative;
+            width: 500px;
+            height: 550px;
+            transition: all 1s ease;
+        }
+
+        .tree-container.medium .tree {
+            width: 600px;
+            height: 650px;
+        }
+
+        .tree-container.large .tree {
+            width: 700px;
+            height: 750px;
+        }
+
+        .tree-container.extra-large .tree {
+            width: 850px;
+            height: 900px;
+        }
+
+        .tree-container.giant .tree {
+            width: 1000px;
+            height: 1050px;
+        }
+
+        .tree-container.massive .tree {
+            width: 1200px;
+            height: 1250px;
+        }
+
+        .trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 120px;
+            background: linear-gradient(to right, #8B4513, #A0522D, #CD853F);
+            border-radius: 30px 30px 10px 10px;
+            box-shadow: inset -10px 0 20px rgba(0,0,0,0.3);
+            transition: all 1s ease;
+        }
+
+        .tree-container.medium .trunk {
+            width: 75px;
+            height: 150px;
+        }
+
+        .tree-container.large .trunk {
+            width: 90px;
+            height: 180px;
+        }
+
+        .tree-container.extra-large .trunk {
+            width: 110px;
+            height: 220px;
+        }
+
+        .tree-container.giant .trunk {
+            width: 130px;
+            height: 260px;
+        }
+
+        .tree-container.massive .trunk {
+            width: 150px;
+            height: 300px;
+        }
+
+        .trunk::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -5px;
+            width: 20px;
+            height: 3px;
+            background: #654321;
+            border-radius: 2px;
+            box-shadow: 0 15px 0 #654321, 0 30px 0 #654321;
+        }
+
+        .trunk::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: -5px;
+            width: 15px;
+            height: 3px;
+            background: #654321;
+            border-radius: 2px;
+            box-shadow: 0 20px 0 #654321;
+        }
+
+        .canopy {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, #228B22 0%, #32CD32 30%, #90EE90 60%, rgba(144, 238, 144, 0.8) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset -20px -20px 40px rgba(0,0,0,0.2);
+            animation: gentle-sway 4s ease-in-out infinite;
+            transition: all 1s ease;
+        }
+
+        .tree-container.medium .canopy {
+            width: 550px;
+            height: 480px;
+            bottom: 130px;
+        }
+
+        .tree-container.large .canopy {
+            width: 650px;
+            height: 560px;
+            bottom: 160px;
+        }
+
+        .tree-container.extra-large .canopy {
+            width: 800px;
+            height: 680px;
+            bottom: 200px;
+        }
+
+        .tree-container.giant .canopy {
+            width: 950px;
+            height: 800px;
+            bottom: 240px;
+        }
+
+        .tree-container.massive .canopy {
+            width: 1100px;
+            height: 950px;
+            bottom: 280px;
+        }
+
+        .canopy::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 80px;
+            width: 120px;
+            height: 100px;
+            background: radial-gradient(ellipse, #32CD32, #90EE90);
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .canopy::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            width: 150px;
+            height: 120px;
+            background: radial-gradient(ellipse, #228B22, #32CD32);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        @keyframes gentle-sway {
+            0%, 100% { transform: translateX(-50%) rotate(-0.5deg); }
+            50% { transform: translateX(-50%) rotate(0.5deg); }
+        }
+
+        .branches {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 300px;
+            transition: all 1s ease;
+        }
+
+
+
+        .wish-form {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 550px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .wish-form h2 {
+            color: #2F4F4F;
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2F4F4F;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(47, 79, 79, 0.2);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #2F4F4F;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #32CD32;
+            box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(47, 79, 79, 0.6);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #32CD32, #90EE90, #98FB98);
+            color: #2F4F4F;
+            border: none;
+            padding: 18px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(50, 205, 50, 0.4);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(50, 205, 50, 0.6);
+            background: linear-gradient(45deg, #228B22, #32CD32, #90EE90);
+        }
+
+        .wish-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #2F4F4F;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: grab;
+            transition: all 0.3s ease;
+            animation: bubble-float 4s ease-in-out infinite;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            z-index: 15;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .wish-bubble:active {
+            cursor: grabbing;
+            animation-play-state: paused;
+        }
+
+        .wish-bubble.dragging {
+            animation-play-state: paused;
+            transform: scale(1.1);
+            z-index: 100;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Mobile-specific bubble styles */
+        @media (max-width: 768px) {
+            .wish-bubble {
+                font-size: 10px;
+                border-width: 3px;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            }
+            
+            .wish-bubble:hover {
+                transform: scale(1.15);
+                box-shadow: 0 8px 25px rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wish-bubble {
+                font-size: 11px;
+                border-width: 4px;
+            }
+        }
+
+        .wish-bubble:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes bubble-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-4px) rotate(-1deg); }
+            75% { transform: translateY(-12px) rotate(0.5deg); }
+        }
+
+        .bubble-content {
+            padding: 8px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            line-height: 1.2;
+        }
+
+        .wish-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px 25px;
+            color: #2F4F4F;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            z-index: 100;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tooltip {
+            position: fixed;
+            background: rgba(47, 79, 79, 0.95);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            max-width: 250px;
+            word-wrap: break-word;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(34, 139, 34, 0.2), rgba(34, 139, 34, 0.4));
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* Large screens (desktops) */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1400px;
+                padding: 30px;
+            }
+            
+            .header h1 {
+                font-size: 3.5em;
+            }
+            
+            .header p {
+                font-size: 1.4em;
+            }
+            
+            .wish-form {
+                max-width: 600px;
+                padding: 50px;
+            }
+        }
+
+        /* Medium screens (tablets landscape) */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.8em;
+            }
+            
+            .header p {
+                font-size: 1.2em;
+            }
+            
+            .tree-container {
+                height: 550px;
+            }
+            
+            .tree {
+                width: 450px;
+                height: 500px;
+            }
+            
+            .canopy {
+                width: 400px;
+                height: 350px;
+            }
+            
+            .trunk {
+                width: 55px;
+                height: 110px;
+            }
+            
+            .wish-form {
+                max-width: 500px;
+                padding: 35px;
+            }
+        }
+
+        /* Small tablets (portrait) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px 10px;
+            }
+            
+            .header h1 {
+                font-size: 2.4em;
+                margin-bottom: 8px;
+            }
+            
+            .header p {
+                font-size: 1.1em;
+            }
+            
+            .tree-container {
+                height: 450px;
+                margin-bottom: 30px;
+            }
+            
+            .tree-container.medium {
+                height: 500px;
+            }
+            
+            .tree-container.large {
+                height: 550px;
+            }
+            
+            .tree-container.extra-large {
+                height: 600px;
+            }
+            
+            .tree-container.giant {
+                height: 650px;
+            }
+            
+            .tree-container.massive {
+                height: 700px;
+            }
+            
+            .tree {
+                width: 320px;
+                height: 400px;
+            }
+            
+            .tree-container.medium .tree {
+                width: 370px;
+                height: 450px;
+            }
+            
+            .tree-container.large .tree {
+                width: 420px;
+                height: 500px;
+            }
+            
+            .tree-container.extra-large .tree {
+                width: 470px;
+                height: 550px;
+            }
+            
+            .tree-container.giant .tree {
+                width: 520px;
+                height: 600px;
+            }
+            
+            .tree-container.massive .tree {
+                width: 570px;
+                height: 650px;
+            }
+            
+            .canopy {
+                width: 290px;
+                height: 280px;
+                bottom: 90px;
+            }
+            
+            .tree-container.medium .canopy {
+                width: 340px;
+                height: 320px;
+                bottom: 110px;
+            }
+            
+            .tree-container.large .canopy {
+                width: 390px;
+                height: 360px;
+                bottom: 130px;
+            }
+            
+            .tree-container.extra-large .canopy {
+                width: 440px;
+                height: 410px;
+                bottom: 150px;
+            }
+            
+            .tree-container.giant .canopy {
+                width: 490px;
+                height: 460px;
+                bottom: 170px;
+            }
+            
+            .tree-container.massive .canopy {
+                width: 540px;
+                height: 510px;
+                bottom: 190px;
+            }
+            
+            .trunk {
+                width: 45px;
+                height: 90px;
+            }
+            
+            .tree-container.medium .trunk {
+                width: 55px;
+                height: 110px;
+            }
+            
+            .tree-container.large .trunk {
+                width: 65px;
+                height: 130px;
+            }
+            
+            .tree-container.extra-large .trunk {
+                width: 75px;
+                height: 150px;
+            }
+            
+            .tree-container.giant .trunk {
+                width: 85px;
+                height: 170px;
+            }
+            
+            .tree-container.massive .trunk {
+                width: 95px;
+                height: 190px;
+            }
+            
+            .wish-form {
+                margin: 20px 5px;
+                padding: 30px 20px;
+                max-width: 95%;
+            }
+            
+            .wish-form h2 {
+                font-size: 1.6em;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            .submit-btn {
+                padding: 15px 25px;
+                font-size: 16px;
+            }
+            
+            .wish-counter {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .wish-bubble {
+                font-size: 10px;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            body {
+                overflow-x: hidden;
+            }
+            
+            .container {
+                padding: 10px 5px;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+                line-height: 1.2;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .tree-container {
+                height: 380px;
+                margin-bottom: 25px;
+            }
+            
+            .tree-container.medium {
+                height: 420px;
+            }
+            
+            .tree-container.large {
+                height: 460px;
+            }
+            
+            .tree-container.extra-large {
+                height: 500px;
+            }
+            
+            .tree-container.giant {
+                height: 540px;
+            }
+            
+            .tree-container.massive {
+                height: 580px;
+            }
+            
+            .tree {
+                width: 280px;
+                height: 330px;
+            }
+            
+            .tree-container.medium .tree {
+                width: 320px;
+                height: 370px;
+            }
+            
+            .tree-container.large .tree {
+                width: 360px;
+                height: 410px;
+            }
+            
+            .tree-container.extra-large .tree {
+                width: 400px;
+                height: 450px;
+            }
+            
+            .tree-container.giant .tree {
+                width: 440px;
+                height: 490px;
+            }
+            
+            .tree-container.massive .tree {
+                width: 480px;
+                height: 530px;
+            }
+            
+            .canopy {
+                width: 250px;
+                height: 230px;
+                bottom: 80px;
+            }
+            
+            .tree-container.medium .canopy {
+                width: 290px;
+                height: 270px;
+                bottom: 95px;
+            }
+            
+            .tree-container.large .canopy {
+                width: 330px;
+                height: 310px;
+                bottom: 110px;
+            }
+            
+            .tree-container.extra-large .canopy {
+                width: 370px;
+                height: 350px;
+                bottom: 125px;
+            }
+            
+            .tree-container.giant .canopy {
+                width: 410px;
+                height: 390px;
+                bottom: 140px;
+            }
+            
+            .tree-container.massive .canopy {
+                width: 450px;
+                height: 430px;
+                bottom: 155px;
+            }
+            
+            .trunk {
+                width: 40px;
+                height: 80px;
+            }
+            
+            .tree-container.medium .trunk {
+                width: 48px;
+                height: 95px;
+            }
+            
+            .tree-container.large .trunk {
+                width: 56px;
+                height: 110px;
+            }
+            
+            .tree-container.extra-large .trunk {
+                width: 64px;
+                height: 125px;
+            }
+            
+            .tree-container.giant .trunk {
+                width: 72px;
+                height: 140px;
+            }
+            
+            .tree-container.massive .trunk {
+                width: 80px;
+                height: 155px;
+            }
+            
+            .wish-form {
+                margin: 15px 5px;
+                padding: 20px 15px;
+                border-radius: 20px;
+            }
+            
+            .wish-form h2 {
+                font-size: 1.4em;
+                margin-bottom: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-group label {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 10px;
+                font-size: 14px;
+                border-radius: 12px;
+            }
+            
+            .form-group textarea {
+                min-height: 100px;
+            }
+            
+            .submit-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                border-radius: 25px;
+            }
+            
+            .wish-counter {
+                position: fixed;
+                top: 5px;
+                right: 5px;
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 15px;
+            }
+            
+            .wish-bubble {
+                font-size: 9px;
+                min-width: 40px;
+                min-height: 40px;
+            }
+            
+            .tooltip {
+                max-width: 200px;
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .floating-leaf {
+                width: 8px;
+                height: 8px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 320px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .tree-container {
+                height: 320px;
+            }
+            
+            .tree {
+                width: 240px;
+                height: 270px;
+            }
+            
+            .canopy {
+                width: 210px;
+                height: 190px;
+                bottom: 70px;
+            }
+            
+            .trunk {
+                width: 35px;
+                height: 70px;
+            }
+            
+            .wish-form {
+                padding: 15px 10px;
+            }
+            
+            .wish-bubble {
+                font-size: 8px;
+                min-width: 35px;
+                min-height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Birthday Wish Tree For Ko Oo 🌳</h1>
+            <p>Make a wish and watch it bloom as a magical bubble on our tree!</p>
+        </div>
+
+        <div class="tree-container">
+            <div class="ground"></div>
+            <div class="tree">
+                <div class="trunk"></div>
+                <div class="branches">
+                </div>
+                <div class="canopy"></div>
+            </div>
+        </div>
+
+        <div class="wish-form">
+            <h2>🍃 Make Your Wish</h2>
+            <form id="wishForm">
+                <div class="form-group">
+                    <label for="wishName">Your Name:</label>
+                    <input type="text" id="wishName" name="wishName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="wishText">Your Birthday Wish:</label>
+                    <textarea id="wishText" name="wishText" placeholder="Write your special birthday wish here..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">🌿 Add My Wish</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="wish-counter">
+        <div>🫧 Total Wishes: <span id="wishCount">0</span></div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- Supabase JavaScript SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        let wishes = [];
+        let wishCount = 0;
+
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ryklljxeezgaevlftmds.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5a2xsanhlZXpnYWV2bGZ0bWRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE1NjQwNjYsImV4cCI6MjA2NzE0MDA2Nn0.OY9tIXnOffouK8NOpMGMBl3PNx2UaayLEFx1D05t6M0';
+
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Load existing wishes from Supabase
+        async function loadWishes() {
+            try {
+                const { data, error } = await supabase
+                    .from('birthday_wishes')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                if (error) {
+                    console.error('Error loading wishes:', error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    // Update wish count first
+                    wishCount = data.length;
+                    document.getElementById('wishCount').textContent = wishCount;
+                    updateTreeSize();
+                    
+                    // Load saved wishes with a small delay for visual effect
+                    data.forEach((wish, index) => {
+                        setTimeout(() => {
+                            createWishBubbleFromDB(wish.name, wish.message, wish.id);
+                        }, index * 100);
+                    });
+                }
+            } catch (error) {
+                console.error('Error connecting to database:', error);
+            }
+        }
+
+        // Create wish bubble from database (doesn't increment counter)
+        function createWishBubbleFromDB(name, wish, wishId) {
+            const bubble = document.createElement('div');
+            bubble.className = 'wish-bubble';
+            
+            const size = Math.random() * 35 + 50; // 50-85px
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.fontSize = Math.max(10, size * 0.13) + 'px';
+            
+            // Position bubble on tree canopy area
+            const treeContainer = document.querySelector('.tree-container');
+            const containerRect = treeContainer.getBoundingClientRect();
+            const treeRect = document.querySelector('.tree').getBoundingClientRect();
+            
+            // Calculate position within tree canopy (adjust for current tree size)
+            const isMedium = treeContainer.classList.contains('medium');
+            const isLarge = treeContainer.classList.contains('large');
+            const isExtraLarge = treeContainer.classList.contains('extra-large');
+            const isGiant = treeContainer.classList.contains('giant');
+            const isMassive = treeContainer.classList.contains('massive');
+            
+            let radiusX = 180;
+            let radiusY = 120;
+            
+            if (isMassive) {
+                radiusX = 450;
+                radiusY = 380;
+            } else if (isGiant) {
+                radiusX = 380;
+                radiusY = 320;
+            } else if (isExtraLarge) {
+                radiusX = 320;
+                radiusY = 270;
+            } else if (isLarge) {
+                radiusX = 260;
+                radiusY = 210;
+            } else if (isMedium) {
+                radiusX = 220;
+                radiusY = 170;
+            }
+            
+            const canopyArea = {
+                centerX: (treeRect.left + treeRect.width / 2) - containerRect.left,
+                centerY: (treeRect.top + treeRect.height * 0.4) - containerRect.top,
+                radiusX: radiusX,
+                radiusY: radiusY
+            };
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const randomRadiusX = Math.random() * canopyArea.radiusX;
+            const randomRadiusY = Math.random() * canopyArea.radiusY;
+            
+            const x = canopyArea.centerX + Math.cos(angle) * randomRadiusX - size / 2;
+            const y = canopyArea.centerY + Math.sin(angle) * randomRadiusY - size / 2;
+            
+            bubble.style.left = x + 'px';
+            bubble.style.top = y + 'px';
+            
+            // Create bubble content
+            const content = document.createElement('div');
+            content.className = 'bubble-content';
+            content.textContent = name;
+            bubble.appendChild(content);
+            
+            // Add random bubble colors
+            const bubbleColors = [
+                'linear-gradient(45deg, rgba(255, 182, 193, 0.6), rgba(255, 192, 203, 0.3))',
+                'linear-gradient(45deg, rgba(173, 216, 230, 0.6), rgba(135, 206, 235, 0.3))',
+                'linear-gradient(45deg, rgba(255, 255, 224, 0.6), rgba(255, 250, 205, 0.3))',
+                'linear-gradient(45deg, rgba(221, 160, 221, 0.6), rgba(238, 130, 238, 0.3))',
+                'linear-gradient(45deg, rgba(255, 218, 185, 0.6), rgba(255, 228, 196, 0.3))',
+                'linear-gradient(45deg, rgba(240, 248, 255, 0.6), rgba(230, 230, 250, 0.3))'
+            ];
+            
+            bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            bubble.style.animationDelay = Math.random() * 2 + 's';
+            
+            // Add hover effect for tooltip and make draggable
+            bubble.addEventListener('mouseenter', (e) => {
+                if (!isDragging) showTooltip(e, name, wish);
+            });
+            bubble.addEventListener('mouseleave', hideTooltip);
+            bubble.addEventListener('mousemove', (e) => {
+                if (!isDragging) moveTooltip(e);
+            });
+            
+            // Add click/tap for mobile
+            bubble.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showTooltip(e, name, wish);
+                
+                // Auto-hide after 3 seconds on mobile
+                setTimeout(hideTooltip, 3000);
+            });
+            
+            makeBubbleDraggable(bubble);
+            
+            treeContainer.appendChild(bubble);
+            
+            // Animate bubble appearance
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'scale(0)';
+            
+            setTimeout(() => {
+                bubble.style.transition = 'all 0.6s ease';
+                bubble.style.opacity = '1';
+                bubble.style.transform = 'scale(1)';
+            }, 100);
+            
+            wishes.push({ name, wish, element: bubble, id: wishId });
+        }
+
+        // Save wish to Supabase
+        async function saveWish(name, message) {
+            try {
+                const { data, error } = await supabase
+                    .from('birthday_wishes')
+                    .insert([
+                        {
+                            name: name,
+                            message: message,
+                            created_at: new Date().toISOString()
+                        }
+                    ])
+                    .select();
+
+                if (error) {
+                    console.error('Error saving wish:', error);
+                    return null;
+                }
+
+                return data[0];
+            } catch (error) {
+                console.error('Error saving to database:', error);
+                return null;
+            }
+        }
+
+        // Create floating leaves
+        function createFloatingLeaves() {
+            const floatingElements = document.querySelector('.floating-elements');
+            
+            setInterval(() => {
+                const leaf = document.createElement('div');
+                leaf.className = 'floating-leaf';
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                leaf.style.animationDelay = '0s';
+                
+                // Random leaf colors
+                const leafColors = ['#228B22', '#32CD32', '#90EE90', '#ADFF2F'];
+                leaf.style.background = leafColors[Math.floor(Math.random() * leafColors.length)];
+                
+                floatingElements.appendChild(leaf);
+                
+                // Remove leaf after animation
+                setTimeout(() => {
+                    if (leaf.parentNode) {
+                        leaf.parentNode.removeChild(leaf);
+                    }
+                }, 15000);
+            }, 2000);
+        }
+
+        // Update tree size based on number of wishes
+        function updateTreeSize() {
+            const treeContainer = document.querySelector('.tree-container');
+            
+            if (wishCount >= 50) {
+                treeContainer.className = 'tree-container massive';
+            } else if (wishCount >= 40) {
+                treeContainer.className = 'tree-container giant';
+            } else if (wishCount >= 30) {
+                treeContainer.className = 'tree-container extra-large';
+            } else if (wishCount >= 20) {
+                treeContainer.className = 'tree-container large';
+            } else if (wishCount >= 10) {
+                treeContainer.className = 'tree-container medium';
+            } else {
+                treeContainer.className = 'tree-container';
+            }
+        }
+
+        // Drag functionality variables
+        let isDragging = false;
+        let currentDragElement = null;
+        let dragOffset = { x: 0, y: 0 };
+
+        // Make bubble draggable
+        function makeBubbleDraggable(bubble) {
+            bubble.addEventListener('mousedown', startDrag);
+            bubble.addEventListener('touchstart', startDrag, { passive: false });
+        }
+
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            currentDragElement = e.currentTarget;
+            
+            const rect = currentDragElement.getBoundingClientRect();
+            const treeContainer = document.querySelector('.tree-container');
+            const containerRect = treeContainer.getBoundingClientRect();
+            
+            // Calculate offset from mouse/touch to element center
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+            
+            dragOffset.x = clientX - (rect.left + rect.width / 2);
+            dragOffset.y = clientY - (rect.top + rect.height / 2);
+            
+            currentDragElement.classList.add('dragging');
+            
+            // Add global event listeners
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging || !currentDragElement) return;
+            
+            e.preventDefault();
+            
+            const treeContainer = document.querySelector('.tree-container');
+            const containerRect = treeContainer.getBoundingClientRect();
+            
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+            
+            // Calculate new position relative to tree container
+            const newX = clientX - containerRect.left - dragOffset.x;
+            const newY = clientY - containerRect.top - dragOffset.y;
+            
+            // Get bubble dimensions and viewport info
+            const bubbleWidth = currentDragElement.offsetWidth;
+            const bubbleHeight = currentDragElement.offsetHeight;
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+            
+            // Constrain to tree container bounds with better mobile handling
+            const padding = Math.min(20, bubbleWidth / 2);
+            const minX = padding;
+            const maxX = containerWidth - padding;
+            const minY = padding;
+            const maxY = containerHeight - padding;
+            
+            const constrainedX = Math.max(minX, Math.min(maxX, newX)) - bubbleWidth / 2;
+            const constrainedY = Math.max(minY, Math.min(maxY, newY)) - bubbleHeight / 2;
+            
+            currentDragElement.style.left = constrainedX + 'px';
+            currentDragElement.style.top = constrainedY + 'px';
+        }
+
+        function endDrag(e) {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            
+            if (currentDragElement) {
+                currentDragElement.classList.remove('dragging');
+                currentDragElement = null;
+            }
+            
+            // Remove global event listeners
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', endDrag);
+        }
+        function createWishBubble(name, wish) {
+            const bubble = document.createElement('div');
+            bubble.className = 'wish-bubble';
+            
+            const size = Math.random() * 35 + 50; // 50-85px
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.fontSize = Math.max(10, size * 0.13) + 'px';
+            
+            // Position bubble on tree canopy area
+            const treeContainer = document.querySelector('.tree-container');
+            const containerRect = treeContainer.getBoundingClientRect();
+            const treeRect = document.querySelector('.tree').getBoundingClientRect();
+            
+            // Calculate position within tree canopy (adjust for current tree size)
+            const isMedium = treeContainer.classList.contains('medium');
+            const isLarge = treeContainer.classList.contains('large');
+            const isExtraLarge = treeContainer.classList.contains('extra-large');
+            const isGiant = treeContainer.classList.contains('giant');
+            const isMassive = treeContainer.classList.contains('massive');
+            
+            let radiusX = 180;
+            let radiusY = 120;
+            
+            if (isMassive) {
+                radiusX = 450;
+                radiusY = 380;
+            } else if (isGiant) {
+                radiusX = 380;
+                radiusY = 320;
+            } else if (isExtraLarge) {
+                radiusX = 320;
+                radiusY = 270;
+            } else if (isLarge) {
+                radiusX = 260;
+                radiusY = 210;
+            } else if (isMedium) {
+                radiusX = 220;
+                radiusY = 170;
+            }
+            
+            const canopyArea = {
+                centerX: (treeRect.left + treeRect.width / 2) - containerRect.left,
+                centerY: (treeRect.top + treeRect.height * 0.4) - containerRect.top,
+                radiusX: radiusX,
+                radiusY: radiusY
+            };
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const randomRadiusX = Math.random() * canopyArea.radiusX;
+            const randomRadiusY = Math.random() * canopyArea.radiusY;
+            
+            const x = canopyArea.centerX + Math.cos(angle) * randomRadiusX - size / 2;
+            const y = canopyArea.centerY + Math.sin(angle) * randomRadiusY - size / 2;
+            
+            bubble.style.left = x + 'px';
+            bubble.style.top = y + 'px';
+            
+            // Create bubble content
+            const content = document.createElement('div');
+            content.className = 'bubble-content';
+            content.textContent = name;
+            bubble.appendChild(content);
+            
+            // Add random bubble colors
+            const bubbleColors = [
+                'linear-gradient(45deg, rgba(255, 182, 193, 0.6), rgba(255, 192, 203, 0.3))',
+                'linear-gradient(45deg, rgba(173, 216, 230, 0.6), rgba(135, 206, 235, 0.3))',
+                'linear-gradient(45deg, rgba(255, 255, 224, 0.6), rgba(255, 250, 205, 0.3))',
+                'linear-gradient(45deg, rgba(221, 160, 221, 0.6), rgba(238, 130, 238, 0.3))',
+                'linear-gradient(45deg, rgba(255, 218, 185, 0.6), rgba(255, 228, 196, 0.3))',
+                'linear-gradient(45deg, rgba(240, 248, 255, 0.6), rgba(230, 230, 250, 0.3))'
+            ];
+            
+            bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            bubble.style.animationDelay = Math.random() * 2 + 's';
+            
+            // Add hover effect for tooltip and make draggable
+            bubble.addEventListener('mouseenter', (e) => {
+                if (!isDragging) showTooltip(e, name, wish);
+            });
+            bubble.addEventListener('mouseleave', hideTooltip);
+            bubble.addEventListener('mousemove', (e) => {
+                if (!isDragging) moveTooltip(e);
+            });
+            
+            makeBubbleDraggable(bubble);
+            
+            treeContainer.appendChild(bubble);
+            
+            // Animate bubble appearance
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'scale(0)';
+            
+            setTimeout(() => {
+                bubble.style.transition = 'all 0.6s ease';
+                bubble.style.opacity = '1';
+                bubble.style.transform = 'scale(1)';
+            }, 100);
+            
+            wishes.push({ name, wish, element: bubble, id: wishId });
+            wishCount++;
+            document.getElementById('wishCount').textContent = wishCount;
+            
+            // Update tree size based on wish count
+            updateTreeSize();
+        }
+
+        // Tooltip functions
+        function showTooltip(e, name, wish) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `<strong>🌸 ${name}</strong><br><br>${wish}`;
+            tooltip.classList.add('show');
+            moveTooltip(e);
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('show');
+        }
+
+        function moveTooltip(e) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.style.left = e.pageX + 15 + 'px';
+            tooltip.style.top = e.pageY + 15 + 'px';
+        }
+
+        // Form submission
+        document.getElementById('wishForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('wishName').value.trim();
+            const wish = document.getElementById('wishText').value.trim();
+            
+            if (name && wish) {
+                // Show loading state
+                const btn = document.querySelector('.submit-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '🌱 Saving...';
+                btn.disabled = true;
+
+                // Save to database first
+                const savedWish = await saveWish(name, wish);
+                
+                if (savedWish) {
+                    // Create bubble with the saved wish ID
+                    createWishBubble(name, wish, savedWish.id);
+                    
+                    // Reset form
+                    document.getElementById('wishName').value = '';
+                    document.getElementById('wishText').value = '';
+                    
+                    // Show success message
+                    btn.textContent = '🌱 Wish Added!';
+                    btn.style.background = 'linear-gradient(45deg, #48CAE4, #0077B6, #023E8A)';
+                } else {
+                    // Show error message
+                    btn.textContent = '❌ Error - Try Again';
+                    btn.style.background = 'linear-gradient(45deg, #ff6b6b, #ee5a52)';
+                }
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'linear-gradient(45deg, #32CD32, #90EE90, #98FB98)';
+                    btn.disabled = false;
+                }, 2500);
+            }
+        });
+
+        // Initialize
+        createFloatingLeaves();
+        
+        // Load existing wishes when page loads
+        loadWishes();
+
+        // Hide tooltip when clicking anywhere else
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.wish-bubble')) {
+                hideTooltip();
+            }
+        });
+    </script>
+</body>
+</html>
