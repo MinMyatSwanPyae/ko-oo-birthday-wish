@@ -423,8 +423,6 @@
         /* Mobile-specific bubble styles */
         @media (max-width: 768px) {
             .wish-bubble {
-                min-width: 45px;
-                min-height: 45px;
                 font-size: 10px;
                 border-width: 3px;
                 box-shadow: 0 6px 20px rgba(0,0,0,0.2);
@@ -438,8 +436,6 @@
 
         @media (max-width: 480px) {
             .wish-bubble {
-                min-width: 50px;
-                min-height: 50px;
                 font-size: 11px;
                 border-width: 4px;
             }
@@ -506,16 +502,14 @@
         /* Mobile tooltip improvements */
         @media (max-width: 768px) {
             .tooltip {
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                max-width: 90vw;
-                font-size: 16px;
-                padding: 20px;
-                border-radius: 15px;
+                position: absolute;
+                max-width: 200px;
+                font-size: 14px;
+                padding: 12px 16px;
+                border-radius: 12px;
                 box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-                text-align: center;
+                text-align: left;
+                transform: none;
             }
         }
 
@@ -1481,16 +1475,56 @@
             tooltip.innerHTML = `<strong>🌸 ${name}</strong><br><br>${wish}`;
             tooltip.classList.add('show');
             
-            // Different positioning for mobile vs desktop
+            // Position tooltip near the bubble
             if (window.innerWidth <= 768) {
-                // Mobile: show at bottom center
-                tooltip.style.left = '50%';
-                tooltip.style.top = 'auto';
-                tooltip.style.bottom = '20px';
-                tooltip.style.transform = 'translateX(-50%)';
+                // Mobile: position relative to bubble
+                positionTooltipNearBubble(e);
             } else {
                 // Desktop: follow mouse
                 moveTooltip(e);
+            }
+        }
+
+        function positionTooltipNearBubble(e) {
+            const tooltip = document.getElementById('tooltip');
+            const bubble = e.target.closest('.wish-bubble');
+            
+            if (bubble) {
+                const bubbleRect = bubble.getBoundingClientRect();
+                const treeContainer = document.querySelector('.tree-container');
+                const containerRect = treeContainer.getBoundingClientRect();
+                
+                // Calculate position relative to tree container
+                let left = bubbleRect.left - containerRect.left + bubbleRect.width + 10;
+                let top = bubbleRect.top - containerRect.top;
+                
+                // Adjust if tooltip would go off-screen
+                const tooltipWidth = 200; // approximate tooltip width
+                const tooltipHeight = 80; // approximate tooltip height
+                
+                // Check right edge
+                if (left + tooltipWidth > containerRect.width) {
+                    left = bubbleRect.left - containerRect.left - tooltipWidth - 10;
+                }
+                
+                // Check left edge
+                if (left < 0) {
+                    left = 10;
+                }
+                
+                // Check bottom edge
+                if (top + tooltipHeight > containerRect.height) {
+                    top = bubbleRect.top - containerRect.top - tooltipHeight - 10;
+                }
+                
+                // Check top edge
+                if (top < 0) {
+                    top = bubbleRect.bottom - containerRect.top + 10;
+                }
+                
+                tooltip.style.position = 'absolute';
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
             }
         }
 
@@ -1503,14 +1537,14 @@
             if (window.innerWidth <= 768) return; // Don't move tooltip on mobile
             
             const tooltip = document.getElementById('tooltip');
+            tooltip.style.position = 'fixed';
             tooltip.style.left = e.pageX + 15 + 'px';
             tooltip.style.top = e.pageY + 15 + 'px';
-            tooltip.style.transform = 'none';
         }
 
         // Hide tooltip when clicking anywhere on mobile
         document.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('wish-bubble')) {
+            if (!e.target.closest('.wish-bubble')) {
                 hideTooltip();
             }
         });
