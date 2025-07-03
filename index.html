@@ -499,19 +499,7 @@
             opacity: 1;
         }
 
-        /* Mobile tooltip improvements */
-        @media (max-width: 768px) {
-            .tooltip {
-                position: absolute;
-                max-width: 200px;
-                font-size: 14px;
-                padding: 12px 16px;
-                border-radius: 12px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-                text-align: left;
-                transform: none;
-            }
-        }
+
 
         .ground {
             position: absolute;
@@ -1162,28 +1150,13 @@
             bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
             bubble.style.animationDelay = Math.random() * 2 + 's';
             
-            // Add mobile-friendly touch interactions
-            bubble.addEventListener('click', (e) => {
-                e.stopPropagation();
-                showTooltip(e, name, wish);
-            });
-            
+            // Add hover effect for tooltip and make draggable
             bubble.addEventListener('mouseenter', (e) => {
                 if (!isDragging) showTooltip(e, name, wish);
             });
             bubble.addEventListener('mouseleave', hideTooltip);
             bubble.addEventListener('mousemove', (e) => {
                 if (!isDragging) moveTooltip(e);
-            });
-            
-            // Touch events for mobile
-            bubble.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                showTooltip(touch, name, wish);
-                
-                // Auto-hide tooltip after 3 seconds on mobile
-                setTimeout(hideTooltip, 3000);
             });
             
             makeBubbleDraggable(bubble);
@@ -1474,58 +1447,7 @@
             const tooltip = document.getElementById('tooltip');
             tooltip.innerHTML = `<strong>🌸 ${name}</strong><br><br>${wish}`;
             tooltip.classList.add('show');
-            
-            // Position tooltip near the bubble
-            if (window.innerWidth <= 768) {
-                // Mobile: position relative to bubble
-                positionTooltipNearBubble(e);
-            } else {
-                // Desktop: follow mouse
-                moveTooltip(e);
-            }
-        }
-
-        function positionTooltipNearBubble(e) {
-            const tooltip = document.getElementById('tooltip');
-            const bubble = e.target.closest('.wish-bubble');
-            
-            if (bubble) {
-                const bubbleRect = bubble.getBoundingClientRect();
-                const treeContainer = document.querySelector('.tree-container');
-                const containerRect = treeContainer.getBoundingClientRect();
-                
-                // Calculate position relative to tree container
-                let left = bubbleRect.left - containerRect.left + bubbleRect.width + 10;
-                let top = bubbleRect.top - containerRect.top;
-                
-                // Adjust if tooltip would go off-screen
-                const tooltipWidth = 200; // approximate tooltip width
-                const tooltipHeight = 80; // approximate tooltip height
-                
-                // Check right edge
-                if (left + tooltipWidth > containerRect.width) {
-                    left = bubbleRect.left - containerRect.left - tooltipWidth - 10;
-                }
-                
-                // Check left edge
-                if (left < 0) {
-                    left = 10;
-                }
-                
-                // Check bottom edge
-                if (top + tooltipHeight > containerRect.height) {
-                    top = bubbleRect.top - containerRect.top - tooltipHeight - 10;
-                }
-                
-                // Check top edge
-                if (top < 0) {
-                    top = bubbleRect.bottom - containerRect.top + 10;
-                }
-                
-                tooltip.style.position = 'absolute';
-                tooltip.style.left = left + 'px';
-                tooltip.style.top = top + 'px';
-            }
+            moveTooltip(e);
         }
 
         function hideTooltip() {
@@ -1534,20 +1456,10 @@
         }
 
         function moveTooltip(e) {
-            if (window.innerWidth <= 768) return; // Don't move tooltip on mobile
-            
             const tooltip = document.getElementById('tooltip');
-            tooltip.style.position = 'fixed';
             tooltip.style.left = e.pageX + 15 + 'px';
             tooltip.style.top = e.pageY + 15 + 'px';
         }
-
-        // Hide tooltip when clicking anywhere on mobile
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.wish-bubble')) {
-                hideTooltip();
-            }
-        });
 
         // Form submission
         document.getElementById('wishForm').addEventListener('submit', async function(e) {
