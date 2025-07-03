@@ -405,6 +405,7 @@
             z-index: 15;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             user-select: none;
+            touch-action: manipulation;
         }
 
         .wish-bubble:active {
@@ -417,6 +418,31 @@
             transform: scale(1.1);
             z-index: 100;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Mobile-specific bubble styles */
+        @media (max-width: 768px) {
+            .wish-bubble {
+                min-width: 45px;
+                min-height: 45px;
+                font-size: 10px;
+                border-width: 3px;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            }
+            
+            .wish-bubble:hover {
+                transform: scale(1.15);
+                box-shadow: 0 8px 25px rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wish-bubble {
+                min-width: 50px;
+                min-height: 50px;
+                font-size: 11px;
+                border-width: 4px;
+            }
         }
 
         .wish-bubble:hover {
@@ -475,6 +501,22 @@
 
         .tooltip.show {
             opacity: 1;
+        }
+
+        /* Mobile tooltip improvements */
+        @media (max-width: 768px) {
+            .tooltip {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                max-width: 90vw;
+                font-size: 16px;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+                text-align: center;
+            }
         }
 
         .ground {
@@ -1031,16 +1073,140 @@
                 }
 
                 if (data && data.length > 0) {
+                    // Update wish count first
+                    wishCount = data.length;
+                    document.getElementById('wishCount').textContent = wishCount;
+                    updateTreeSize();
+                    
                     // Load saved wishes with a small delay for visual effect
                     data.forEach((wish, index) => {
                         setTimeout(() => {
-                            createWishBubble(wish.name, wish.message, wish.id);
+                            createWishBubbleFromDB(wish.name, wish.message, wish.id);
                         }, index * 100);
                     });
                 }
             } catch (error) {
                 console.error('Error connecting to database:', error);
             }
+        }
+
+        // Create wish bubble from database (doesn't increment counter)
+        function createWishBubbleFromDB(name, wish, wishId) {
+            const bubble = document.createElement('div');
+            bubble.className = 'wish-bubble';
+            
+            const size = Math.random() * 35 + 50; // 50-85px
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.fontSize = Math.max(10, size * 0.13) + 'px';
+            
+            // Position bubble on tree canopy area
+            const treeContainer = document.querySelector('.tree-container');
+            const containerRect = treeContainer.getBoundingClientRect();
+            const treeRect = document.querySelector('.tree').getBoundingClientRect();
+            
+            // Calculate position within tree canopy (adjust for current tree size)
+            const isMedium = treeContainer.classList.contains('medium');
+            const isLarge = treeContainer.classList.contains('large');
+            const isExtraLarge = treeContainer.classList.contains('extra-large');
+            const isGiant = treeContainer.classList.contains('giant');
+            const isMassive = treeContainer.classList.contains('massive');
+            
+            let radiusX = 180;
+            let radiusY = 120;
+            
+            if (isMassive) {
+                radiusX = 450;
+                radiusY = 380;
+            } else if (isGiant) {
+                radiusX = 380;
+                radiusY = 320;
+            } else if (isExtraLarge) {
+                radiusX = 320;
+                radiusY = 270;
+            } else if (isLarge) {
+                radiusX = 260;
+                radiusY = 210;
+            } else if (isMedium) {
+                radiusX = 220;
+                radiusY = 170;
+            }
+            
+            const canopyArea = {
+                centerX: (treeRect.left + treeRect.width / 2) - containerRect.left,
+                centerY: (treeRect.top + treeRect.height * 0.4) - containerRect.top,
+                radiusX: radiusX,
+                radiusY: radiusY
+            };
+            
+            const angle = Math.random() * 2 * Math.PI;
+            const randomRadiusX = Math.random() * canopyArea.radiusX;
+            const randomRadiusY = Math.random() * canopyArea.radiusY;
+            
+            const x = canopyArea.centerX + Math.cos(angle) * randomRadiusX - size / 2;
+            const y = canopyArea.centerY + Math.sin(angle) * randomRadiusY - size / 2;
+            
+            bubble.style.left = x + 'px';
+            bubble.style.top = y + 'px';
+            
+            // Create bubble content
+            const content = document.createElement('div');
+            content.className = 'bubble-content';
+            content.textContent = name;
+            bubble.appendChild(content);
+            
+            // Add random bubble colors
+            const bubbleColors = [
+                'linear-gradient(45deg, rgba(255, 182, 193, 0.6), rgba(255, 192, 203, 0.3))',
+                'linear-gradient(45deg, rgba(173, 216, 230, 0.6), rgba(135, 206, 235, 0.3))',
+                'linear-gradient(45deg, rgba(255, 255, 224, 0.6), rgba(255, 250, 205, 0.3))',
+                'linear-gradient(45deg, rgba(221, 160, 221, 0.6), rgba(238, 130, 238, 0.3))',
+                'linear-gradient(45deg, rgba(255, 218, 185, 0.6), rgba(255, 228, 196, 0.3))',
+                'linear-gradient(45deg, rgba(240, 248, 255, 0.6), rgba(230, 230, 250, 0.3))'
+            ];
+            
+            bubble.style.background = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            bubble.style.animationDelay = Math.random() * 2 + 's';
+            
+            // Add mobile-friendly touch interactions
+            bubble.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showTooltip(e, name, wish);
+            });
+            
+            bubble.addEventListener('mouseenter', (e) => {
+                if (!isDragging) showTooltip(e, name, wish);
+            });
+            bubble.addEventListener('mouseleave', hideTooltip);
+            bubble.addEventListener('mousemove', (e) => {
+                if (!isDragging) moveTooltip(e);
+            });
+            
+            // Touch events for mobile
+            bubble.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                showTooltip(touch, name, wish);
+                
+                // Auto-hide tooltip after 3 seconds on mobile
+                setTimeout(hideTooltip, 3000);
+            });
+            
+            makeBubbleDraggable(bubble);
+            
+            treeContainer.appendChild(bubble);
+            
+            // Animate bubble appearance
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'scale(0)';
+            
+            setTimeout(() => {
+                bubble.style.transition = 'all 0.6s ease';
+                bubble.style.opacity = '1';
+                bubble.style.transform = 'scale(1)';
+            }, 100);
+            
+            wishes.push({ name, wish, element: bubble, id: wishId });
         }
 
         // Save wish to Supabase
@@ -1314,7 +1480,18 @@
             const tooltip = document.getElementById('tooltip');
             tooltip.innerHTML = `<strong>🌸 ${name}</strong><br><br>${wish}`;
             tooltip.classList.add('show');
-            moveTooltip(e);
+            
+            // Different positioning for mobile vs desktop
+            if (window.innerWidth <= 768) {
+                // Mobile: show at bottom center
+                tooltip.style.left = '50%';
+                tooltip.style.top = 'auto';
+                tooltip.style.bottom = '20px';
+                tooltip.style.transform = 'translateX(-50%)';
+            } else {
+                // Desktop: follow mouse
+                moveTooltip(e);
+            }
         }
 
         function hideTooltip() {
@@ -1323,10 +1500,20 @@
         }
 
         function moveTooltip(e) {
+            if (window.innerWidth <= 768) return; // Don't move tooltip on mobile
+            
             const tooltip = document.getElementById('tooltip');
             tooltip.style.left = e.pageX + 15 + 'px';
             tooltip.style.top = e.pageY + 15 + 'px';
+            tooltip.style.transform = 'none';
         }
+
+        // Hide tooltip when clicking anywhere on mobile
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('wish-bubble')) {
+                hideTooltip();
+            }
+        });
 
         // Form submission
         document.getElementById('wishForm').addEventListener('submit', async function(e) {
